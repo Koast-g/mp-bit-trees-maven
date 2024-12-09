@@ -79,7 +79,7 @@ public class BitTree {
    */
   private void setHelper(String bits, String value, BitTreeNode root) {
     if (!isValidBit(bits)) {
-      throw new IndexOutOfBoundsException();
+      throw new IndexOutOfBoundsException("Invalid bits");
     } // if
 
     BitTreeNode curNode = root;
@@ -108,7 +108,7 @@ public class BitTree {
    */
   private String getHelper(String bits, BitTreeNode root) {
     if (!isValidBit(bits)) {
-      throw new IndexOutOfBoundsException();
+      throw new IndexOutOfBoundsException("Invalid bits");
     } // if
     BitTreeNode curNode = root;
     for (char bit : bits.toCharArray()) {
@@ -171,7 +171,7 @@ public class BitTree {
    * @return String value that is store in certain location
    */
   public String get(String bits) {
-    return this.getHelper(bits, this.root);
+    return getHelper(bits, this.root);
   } // get(String, String)
 
   /**

@@ -1,6 +1,8 @@
 package edu.grinnell.csc207.main;
 
+import edu.grinnell.csc207.util.BrailleAsciiTables;
 import java.io.PrintWriter;
+import java.util.Arrays;
 
 /**
  * Main Class.
@@ -8,38 +10,11 @@ import java.io.PrintWriter;
  * @author koast Tsymbal
  */
 public class BrailleASCII {
-  // +---------------+-----------------------------------------------
-  // | Local helpers |
-  // +---------------+
-  /**
-   * Converts Braile to String.
-   *
-   * @param input String
-   * @return Braile String
-   */
-  static String toBraile(String input) {
-    return "";
-  } // toBraile(String)
-
-  /**
-   * Converts ASCII to String.
-   *
-   * @param input String
-   * @return ASCII String
-   */
-  static String toASCII(String input) {
-    return "";
-  } // toBraile(String)
-
-  /**
-   * Converts string to Unicode.
-   *
-   * @param input String
-   * @return Unicode String
-   */
-  static String toUnicode(String input) {
-    return "";
-  } // toBraile(String)
+  // +-----------+-----------------------------------------------
+  // | Constants |
+  // +-----------+
+  /** Valid commands. */
+  static final String[] COMMANDS = {"braille", "ascii", "unicode"};
 
   // +------+--------------------------------------------------------
   // | Main |
@@ -57,19 +32,48 @@ public class BrailleASCII {
     if (args.length != 2) {
       throw new Exception("Invalid input length");
     } // if
+    String command = args[0].toLowerCase();
+    String input = args[1];
+    boolean containsCommand = Arrays.stream(COMMANDS).anyMatch(command::equals);
 
-    switch (args[0]) {
+    if (!containsCommand) {
+      throw new Exception("Invalid command");
+    } // if
+
+    switch (command) {
       case "braille":
-        pen.println(toBraile(args[1]));
+        try {
+          for (int i = 0; i < input.length(); i++) {
+            pen.println(BrailleAsciiTables.toBraille(input.charAt(i)));
+          } // for
+        } catch (Exception e) {
+          pen.println("Trouble translating because No corresponding value");
+        } // try/catch
         break;
       case "ascii":
-        pen.println(toASCII(args[1]));
+        if (input.length() % 6 != 0) {
+          throw new Exception("Invalid lenght of a bit string");
+        } // if
+        try {
+          for (int i = 0; i < input.length(); i += 6) {
+            pen.print(BrailleAsciiTables.toAscii(input.substring(i, i + 6)));
+          } // for
+        } catch (Exception e) {
+          pen.println("Trouble translating because No corresponding value");
+        } // try/catch
         break;
       case "unicode":
-        pen.println(toUnicode(args[1]));
+        try {
+          for (int i = 0; i < input.length(); i++) {
+            pen.println(
+                BrailleAsciiTables.toUnicode(BrailleAsciiTables.toBraille(input.charAt(i))));
+          } // for
+        } catch (Exception e) {
+          pen.println("Trouble translating because No corresponding value");
+        } // try/catch
         break;
       default:
-        throw new Exception("Invalid command");
+        throw new Exception("Something went wrong");
     } // switch
     pen.close();
   } // main(String[]

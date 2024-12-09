@@ -197,12 +197,12 @@ public class BrailleAsciiTables {
    */
   public static String toBraille(char letter) {
     // Make sure we've loaded the braille-to-ASCII tree.
-    if (null == b2aTree) {
-      b2aTree = new BitTree(8);
-      InputStream b2aStream = new ByteArrayInputStream(b2a.getBytes());
-      b2aTree.load(b2aStream);
+    if (null == a2bTree) {
+      a2bTree = new BitTree(8);
+      InputStream a2bStream = new ByteArrayInputStream(a2b.getBytes());
+      a2bTree.load(a2bStream);
       try {
-        b2aStream.close();
+        a2bStream.close();
       } catch (IOException e) {
         // We don't care if we can't close the stream.
       } // try/catch
@@ -230,11 +230,7 @@ public class BrailleAsciiTables {
         // We don't care if we can't close the stream.
       } // try/catch
     } // if
-    try {
-      return b2aTree.get(bits);
-    } catch (Exception e) {
-      throw new Exception("Invalid length of bit string");
-    } // try/catch
+    return b2aTree.get(bits);
   } // toAscii(String)
 
   /**
@@ -255,10 +251,6 @@ public class BrailleAsciiTables {
         // We don't care if we can't close the stream.
       } // try/catch
     } // if
-    try {
-      return new String(Character.toChars(Integer.parseInt(b2uTree.get(bits), 16)));
-    } catch (Exception e) {
-      throw new Exception("Invalid length of bit string");
-    } // try/catch
+    return new String(Character.toChars(Integer.parseInt(b2uTree.get(bits), 16)));
   } // toUnicode(String)
 } // BrailleAsciiTables
